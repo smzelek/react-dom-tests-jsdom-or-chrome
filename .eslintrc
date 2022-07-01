@@ -1,0 +1,28 @@
+{
+  "plugins": ["@typescript-eslint"],
+  "extends": ["react-app"],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "styled-components",
+            "message": "Please import from styled-components/macro."
+          },
+          {
+            "name": "ionicons/icons",
+            "message": "Please import icons from ./components/IonIcon"
+          }
+        ],
+        "patterns": ["!styled-components/macro", "!ionicons/icons"]
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": "warn",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/alt-text": "off",
+    "react/jsx-no-target-blank": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }]
+  }
+}
