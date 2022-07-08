@@ -1,4 +1,6 @@
 import { configure } from '@testing-library/react';
+import * as chai from 'chai';
+chai.use(require('chai-dom'));
 
 configure({
     getElementError: (message: string | null, _: Element) => {

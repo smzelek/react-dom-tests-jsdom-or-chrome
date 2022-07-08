@@ -265,7 +265,7 @@ const Select = <T,>({
             </a>
           )}
           <span className="select-box--caret">
-            ▼a
+            ▼
           </span>
         </div>
         {dropdownOpen && (

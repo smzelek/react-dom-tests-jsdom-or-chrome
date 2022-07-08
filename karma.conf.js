@@ -18,22 +18,23 @@ module.exports = function (config) {
     basePath: "",
     frameworks: ["jasmine", "webpack"],
     client: {
+      clearContext: false,
       jasmine: {
         random: true,
         seed: '4321',
         oneFailurePerSpec: true,
         failFast: true,
-        timeoutInterval: TIMEOUT
+        timeoutInterval: TIMEOUT,
       }
     },
     exclude: [],
     preprocessors: {
-      "**/*.test.tsx": ["webpack"],
+      "**/*.spec.tsx": ["webpack"],
       "setupTests.ts": ["webpack"],
     },
     files: [
       "setupTests.ts",
-      "**/*.test.tsx",
+      "**/*.spec.tsx",
       // Fixes images not resolving (1/2): https://github.com/ryanclark/karma-webpack/issues/498
       {
         pattern: `${outputPath}/**/*`,
@@ -48,13 +49,16 @@ module.exports = function (config) {
       },
       mode: "development",
       resolve: {
-        extensions: [".ts", ".tsx", ".js", ".css"]
+        extensions: [".ts", ".tsx", ".js", ".css"],
+        modules: [path.resolve(__dirname, "src"), "node_modules"],
+        alias: {
+          src: path.resolve(__dirname, 'src/'),
+        },
       },
       module: {
         rules: [
           {
             test: /\.(js|ts|jsx|tsx)$/,
-            exclude: /node_modules/,
             use: {
               loader: "babel-loader",
               options: {
@@ -70,7 +74,13 @@ module.exports = function (config) {
             use: [
               "style-loader",
               "css-loader",
+              "sass-loader"
             ]
+          },
+          {
+            test: /\.svg$/i,
+            issuer: /\.[jt]sx?$/,
+            use: ['@svgr/webpack'],
           },
           {
             test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
@@ -88,7 +98,14 @@ module.exports = function (config) {
     webpackMiddleware: {
       stats: "errors-only",
     },
-    reporters: ["progress"],
+    reporters: ['kjhtml', 'spec'],
+    plugins: [
+      'karma-jasmine',
+      'karma-webpack',
+      'karma-chrome-launcher',
+      'karma-jasmine-html-reporter',
+      'karma-spec-reporter',
+    ],
     port: 9876,
     colors: true,
     logLevel: config.LOG_ERROR,

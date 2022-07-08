@@ -3,6 +3,21 @@
   "extends": ["react-app"],
   "parser": "@typescript-eslint/parser",
   "rules": {
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "spyOn",
+        "message": "Use sinon for mocking."
+      },
+      {
+        "name": "spyOnProperty",
+        "message": "Use sinon for mocking."
+      },
+      {
+        "name": "expect",
+        "message": "Use src/expect."
+      }
+    ],
     "no-restricted-imports": [
       "error",
       {
@@ -10,10 +25,6 @@
           {
             "name": "styled-components",
             "message": "Please import from styled-components/macro."
-          },
-          {
-            "name": "ionicons/icons",
-            "message": "Please import icons from ./components/IonIcon"
           }
         ],
         "patterns": ["!styled-components/macro", "!ionicons/icons"]
@@ -24,5 +35,13 @@
     "jsx-a11y/alt-text": "off",
     "react/jsx-no-target-blank": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.tsx"],
+      "rules": {
+        "@typescript-eslint/no-unused-expressions": "off"
+      }
+    }
+  ]
 }

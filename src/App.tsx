@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import logo from './logo.svg';
-import Select from './select/Select';
+import Select from 'src/select/Select';
 
 const App = ({ name }: { name: string }) => {
   return (
