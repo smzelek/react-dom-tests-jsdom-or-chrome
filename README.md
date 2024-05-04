@@ -6,6 +6,8 @@ This setup allows you to run in Headful or Headless Chrome and visually debug yo
 
 With this setup, you can still use React Testing Library as you may be used to - it just works! 💥
 
+‼️ For a Chrome only demo without JSDOM compatibility code, check out this repo: https://github.com/smzelek/react-dom-tests-in-chrome .
+
 ## Cross-test runner compatibility
 This repo contains compatibility mapping code that allows you to run the RTL Component Tests in _either_ Jest+JSDOM or Karma+Chrome.  
 
