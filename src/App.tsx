@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import logo from './logo.svg';
-import Select from 'src/Select';
+import Select from './Select';
 
 const App = ({ name }: { name: string }) => {
   return (
@@ -9,6 +9,7 @@ const App = ({ name }: { name: string }) => {
       <header className="App-header">
         <h1>{name}</h1>
         <img src={logo} className="App-logo" alt="logo" />
+        <Select width={200} value={null} options={['option 1', 'option 2']} />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
@@ -20,7 +21,6 @@ const App = ({ name }: { name: string }) => {
         >
           Learn React
         </a>
-      <Select width='medium' value={null} options={['1', '2']} />
       </header>
     </div>
   );

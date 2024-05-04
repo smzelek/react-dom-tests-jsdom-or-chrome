@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { fireEvent, render, screen } from '@testing-library/react';
 import Select from "./Select";
-import { expect } from 'src/expect';
+import { expect } from './test/expect';
 
 const SelectFixture = (): JSX.Element => {
   const [value, setValue] = useState<string | null>(null)
   return (<Select
     label="my select"
+    width={400}
     value={value}
-    onChange={(e) => setValue(e)}
+    onChange={(e) => setValue(e as any)}
     options={['Option1', 'Option2']} />);
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from '@testing-library/react';
 import App from "./App";
-import { expect } from 'src/expect';
+import { expect } from 'src/test/expect';
 
 it("<App />", async () => {
   render(

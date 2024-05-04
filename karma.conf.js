@@ -30,6 +30,7 @@ module.exports = function (config) {
       'src/test/setupMockApi.ts': ['webpack'],
     },
     files: [
+      'src/index.css',
       'src/test/setupTests.jasmine.ts',
       '**/*.spec.tsx',
       'src/test/setupMockApi.ts',
@@ -49,6 +50,7 @@ module.exports = function (config) {
     proxies: {
       '/mockServiceWorker.js': 'http://localhost:9876/base/public/mockServiceWorker.js',
       '/img/': 'http://localhost:9876/base/public/img/',
+      '/assets/': 'http://localhost:9876/base/public/assets/',
       '/sprites/': 'http://localhost:9876/base/public/sprites/',
     },
     webpack: {

@@ -8,7 +8,7 @@ beforeAll(async () => {
   await api.start({
     quiet: true,
     onUnhandledRequest: (request, print) => {
-      if (/^\/(img|sprites|absolute)\/.*/.test(request.url.pathname)) {
+      if (/^\/(img|sprites|absolute|assets)\/.*/.test(request.url.pathname)) {
         return;
       }
       print.warning();
