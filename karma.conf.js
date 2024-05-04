@@ -1,22 +1,18 @@
-const os = require("os");
-const path = require("path");
+const os = require('os');
+const path = require('path');
 const ENTROPY_SIZE = 1000000;
-const outputPath = `${path.join(os.tmpdir(), "_karma_webpack_")}${Math.floor(Math.random() * ENTROPY_SIZE)}`;
+const outputPath = `${path.join(os.tmpdir(), '_karma_webpack_')}${Math.floor(Math.random() * ENTROPY_SIZE)}`;
 
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 process.env.PUBLIC_URL = '';
 
-if (process.env.CI) {
-  process.env.CHROME_BIN = "/usr/bin/google-chrome";
-}
-
 const TIMEOUT = 100000;
 
 module.exports = function (config) {
   config.set({
-    basePath: "",
-    frameworks: ["jasmine", "webpack"],
+    basePath: '',
+    frameworks: ['jasmine', 'webpack'],
     client: {
       clearContext: false,
       jasmine: {
@@ -25,32 +21,45 @@ module.exports = function (config) {
         oneFailurePerSpec: true,
         failFast: true,
         timeoutInterval: TIMEOUT,
-      }
+      },
     },
-    exclude: [],
+    exclude: ['src/mocks/server.ts'],
     preprocessors: {
-      "**/*.spec.tsx": ["webpack"],
-      "setupTests.ts": ["webpack"],
+      'src/test/setupTests.jasmine.ts': ['webpack'],
+      '**/*.spec.tsx': ['webpack'],
+      'src/test/setupMockApi.ts': ['webpack'],
     },
     files: [
-      "setupTests.ts",
-      "**/*.spec.tsx",
+      'src/test/setupTests.jasmine.ts',
+      '**/*.spec.tsx',
+      'src/test/setupMockApi.ts',
+      'public/mockServiceWorker.js',
+      {
+        pattern: 'public/**/*',
+        included: false,
+        watched: false,
+      },
       // Fixes images not resolving (1/2): https://github.com/ryanclark/karma-webpack/issues/498
       {
         pattern: `${outputPath}/**/*`,
         watched: false,
-        included: false
-      }
+        included: false,
+      },
     ],
+    proxies: {
+      '/mockServiceWorker.js': 'http://localhost:9876/base/public/mockServiceWorker.js',
+      '/img/': 'http://localhost:9876/base/public/img/',
+      '/sprites/': 'http://localhost:9876/base/public/sprites/',
+    },
     webpack: {
       // Fixes images not resolving (2/2): https://github.com/ryanclark/karma-webpack/issues/498
       output: {
-        path: outputPath
+        path: outputPath,
       },
-      mode: "development",
+      mode: 'development',
       resolve: {
-        extensions: [".ts", ".tsx", ".js", ".css"],
-        modules: [path.resolve(__dirname, "src"), "node_modules"],
+        extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
+        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
         alias: {
           src: path.resolve(__dirname, 'src/'),
         },
@@ -59,23 +68,17 @@ module.exports = function (config) {
         rules: [
           {
             test: /\.(js|ts|jsx|tsx)$/,
+            exclude: /node_modules\/(?!(@ionic-internal)\/).*/,
             use: {
-              loader: "babel-loader",
+              loader: 'babel-loader',
               options: {
-                presets: [
-                  "@babel/preset-typescript",
-                  "babel-preset-react-app",
-                ]
-              }
-            }
+                presets: ['@babel/preset-typescript', 'babel-preset-react-app'],
+              },
+            },
           },
           {
             test: /\.(css|scss)$/,
-            use: [
-              "style-loader",
-              "css-loader",
-              "sass-loader"
-            ]
+            use: ['style-loader', 'css-loader', 'sass-loader'],
           },
           {
             test: /\.svg$/i,
@@ -85,39 +88,35 @@ module.exports = function (config) {
           {
             test: /\.(jpg|jpeg|png|gif|mp3|svg)$/,
             use: {
-              loader: "file-loader",
+              loader: 'file-loader',
               options: {
-                publicPath: ""
-              }
-            }
+                publicPath: '',
+              },
+            },
           },
         ],
       },
-      stats: "errors-only",
+      stats: 'errors-only',
+      target: ['web', 'es5'],
+      devtool: 'eval-cheap-source-map',
     },
     webpackMiddleware: {
-      stats: "errors-only",
+      stats: 'errors-only',
     },
     reporters: ['kjhtml', 'spec'],
-    plugins: [
-      'karma-jasmine',
-      'karma-webpack',
-      'karma-chrome-launcher',
-      'karma-jasmine-html-reporter',
-      'karma-spec-reporter',
-    ],
+    plugins: ['karma-jasmine', 'karma-webpack', 'karma-chrome-launcher', 'karma-jasmine-html-reporter', 'karma-spec-reporter'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_ERROR,
     autoWatch: true,
-    browsers: process.env.CI ? ["ChromeHeadlessNoSandbox"] : ["Chrome"],
+    browsers: process.env.CI ? ['ChromeHeadlessNoSandbox'] : ['Chrome'],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
-        base: "ChromeHeadless",
-        flags: ["--no-sandbox"],
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox'],
       },
     },
-    singleRun: false,
+    singleRun: process.env.CI ? true : false,
     concurrency: Infinity,
   });
 };
